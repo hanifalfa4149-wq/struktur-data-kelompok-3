@@ -1,0 +1,14 @@
+{
+  "gudang": {
+    "nama": "Pusat",
+    "cabang": []
+  },
+  "stok": {
+    "beras": 100,
+    "gula": 50
+  },
+  "peta_kota": {
+    "Jakarta": ["Bandung", "Semarang"],
+    "Bandung": ["Jakarta"]
+  }
+}
