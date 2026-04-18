@@ -1,11 +1,19 @@
 """Orchestrator that connects all logistics modules."""
 
-from core.graph import CityGraph
-from core.inventory import Inventory
-from core.linked_list import RouteNode
-from core.queue import TruckQueue
-from core.stack import LoadHistory
-from core.tree import WarehouseNode
+try:
+    from ..core.graph import CityGraph
+    from ..core.inventory import Inventory
+    from ..core.linked_list import RouteNode
+    from ..core.queue import TruckQueue
+    from ..core.stack import LoadHistory
+    from ..core.tree import WarehouseNode
+except ImportError:  # pragma: no cover - fallback when imported as top-level package
+    from core.graph import CityGraph
+    from core.inventory import Inventory
+    from core.linked_list import RouteNode
+    from core.queue import TruckQueue
+    from core.stack import LoadHistory
+    from core.tree import WarehouseNode
 
 
 class LogisticsService:

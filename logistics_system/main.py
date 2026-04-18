@@ -1,6 +1,9 @@
 """Entry point for the logistics system CLI."""
 
-from services.logistics import LogisticsService
+try:
+    from .services.logistics import LogisticsService
+except ImportError:  # pragma: no cover - fallback when run as script
+    from services.logistics import LogisticsService
 
 
 def main() -> None:
