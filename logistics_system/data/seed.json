@@ -1,14 +1,273 @@
 {
-  "gudang": {
-    "nama": "Pusat",
-    "cabang": []
+  "tree": {
+    "id": "PUSAT",
+    "name": "Kantor Pusat",
+    "type": "pusat",
+    "children": [
+      {
+        "id": "REG-TIMUR",
+        "name": "Regional Timur",
+        "type": "regional",
+        "children": [
+          {
+            "id": "GDG-SBY",
+            "name": "Gudang Surabaya",
+            "type": "gudang",
+            "children": []
+          },
+          {
+            "id": "GDG-MLG",
+            "name": "Gudang Malang",
+            "type": "gudang",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "REG-BARAT",
+        "name": "Regional Barat",
+        "type": "regional",
+        "children": [
+          {
+            "id": "GDG-JKT",
+            "name": "Gudang Jakarta",
+            "type": "gudang",
+            "children": []
+          },
+          {
+            "id": "GDG-BDG",
+            "name": "Gudang Bandung",
+            "type": "gudang",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "REG-TENGAH",
+        "name": "Regional Tengah",
+        "type": "regional",
+        "children": [
+          {
+            "id": "GDG-SMG",
+            "name": "Gudang Semarang",
+            "type": "gudang",
+            "children": []
+          }
+        ]
+      }
+    ]
   },
-  "stok": {
-    "beras": 100,
-    "gula": 50
+  "inventory": {
+    "GDG-SBY": {
+      "BRG-001": {
+        "nama": "Laptop ASUS VivoBook",
+        "stok": 30
+      },
+      "BRG-002": {
+        "nama": "Mouse Wireless Logitech",
+        "stok": 150
+      },
+      "BRG-003": {
+        "nama": "Keyboard Mechanical Rexus",
+        "stok": 75
+      },
+      "BRG-004": {
+        "nama": "Monitor LG 24 inch",
+        "stok": 20
+      },
+      "BRG-005": {
+        "nama": "Headset Gaming HyperX",
+        "stok": 60
+      }
+    },
+    "GDG-MLG": {
+      "BRG-001": {
+        "nama": "Laptop ASUS VivoBook",
+        "stok": 15
+      },
+      "BRG-006": {
+        "nama": "Webcam Logitech C920",
+        "stok": 45
+      },
+      "BRG-007": {
+        "nama": "SSD External Samsung 1TB",
+        "stok": 90
+      }
+    },
+    "GDG-JKT": {
+      "BRG-001": {
+        "nama": "Laptop ASUS VivoBook",
+        "stok": 50
+      },
+      "BRG-002": {
+        "nama": "Mouse Wireless Logitech",
+        "stok": 200
+      },
+      "BRG-008": {
+        "nama": "Printer Canon PIXMA",
+        "stok": 25
+      },
+      "BRG-009": {
+        "nama": "Router TP-Link Archer",
+        "stok": 40
+      },
+      "BRG-010": {
+        "nama": "UPS APC 650VA",
+        "stok": 18
+      }
+    },
+    "GDG-BDG": {
+      "BRG-003": {
+        "nama": "Keyboard Mechanical Rexus",
+        "stok": 55
+      },
+      "BRG-006": {
+        "nama": "Webcam Logitech C920",
+        "stok": 30
+      },
+      "BRG-011": {
+        "nama": "Speaker Bluetooth JBL",
+        "stok": 80
+      }
+    },
+    "GDG-SMG": {
+      "BRG-002": {
+        "nama": "Mouse Wireless Logitech",
+        "stok": 120
+      },
+      "BRG-007": {
+        "nama": "SSD External Samsung 1TB",
+        "stok": 65
+      },
+      "BRG-009": {
+        "nama": "Router TP-Link Archer",
+        "stok": 35
+      },
+      "BRG-012": {
+        "nama": "Flash Disk Sandisk 64GB",
+        "stok": 300
+      }
+    }
   },
-  "peta_kota": {
-    "Jakarta": ["Bandung", "Semarang"],
-    "Bandung": ["Jakarta"]
+  "graph": {
+    "Jakarta": [
+      [
+        "Bandung",
+        150
+      ],
+      [
+        "Semarang",
+        450
+      ]
+    ],
+    "Semarang": [
+      [
+        "Jakarta",
+        450
+      ],
+      [
+        "Surabaya",
+        312
+      ],
+      [
+        "Yogyakarta",
+        115
+      ]
+    ],
+    "Surabaya": [
+      [
+        "Semarang",
+        312
+      ],
+      [
+        "Malang",
+        90
+      ],
+      [
+        "Banyuwangi",
+        260
+      ]
+    ],
+    "Bandung": [
+      [
+        "Jakarta",
+        150
+      ],
+      [
+        "Yogyakarta",
+        310
+      ]
+    ],
+    "Malang": [
+      [
+        "Surabaya",
+        90
+      ]
+    ],
+    "Yogyakarta": [
+      [
+        "Semarang",
+        115
+      ],
+      [
+        "Bandung",
+        310
+      ]
+    ],
+    "Banyuwangi": [
+      [
+        "Surabaya",
+        260
+      ]
+    ]
+  },
+  "queue": [
+    "B-1234-CD",
+    "D-5678-GH"
+  ],
+  "active_trucks": {
+    "N-9999-ZZ": {
+      "stack": [
+        [
+          "BRG-002",
+          10
+        ],
+        [
+          "BRG-001",
+          2
+        ]
+      ]
+    }
+  },
+  "courier_routes": {
+    "KUR-01": [
+      {
+        "paket_id": "PKT-001",
+        "alamat": "Jl. Pemuda No. 12, Surabaya",
+        "penerima": "Budi Santoso"
+      },
+      {
+        "paket_id": "PKT-002",
+        "alamat": "Jl. Raya Darmo No. 45, Surabaya",
+        "penerima": "Ani Wijaya"
+      },
+      {
+        "paket_id": "PKT-003",
+        "alamat": "Jl. Ahmad Yani No. 88, Surabaya",
+        "penerima": "Citra Dewi"
+      }
+    ],
+    "KUR-02": [
+      {
+        "paket_id": "PKT-004",
+        "alamat": "Jl. Sudirman No. 1, Jakarta",
+        "penerima": "Dedi Kurniawan"
+      },
+      {
+        "paket_id": "PKT-005",
+        "alamat": "Jl. Thamrin No. 20, Jakarta",
+        "penerima": "Eka Putri"
+      }
+    ]
   }
 }
