@@ -1,8 +1,9 @@
 """FastAPI entrypoint for the logistics backend."""
 
-from api.routes import courier, graph, inventory, queue, stack, tree
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from logistics_system.api.routes import courier, graph, inventory, queue, stack, tree
 
 app = FastAPI(title="Logistics API")
 

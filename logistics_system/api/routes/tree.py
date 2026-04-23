@@ -1,5 +1,6 @@
-from api.state import load_logistics_service
 from fastapi import APIRouter
+
+from logistics_system.api.state import load_logistics_service
 
 router = APIRouter(prefix="/api/tree", tags=["tree"])
 

@@ -1,8 +1,13 @@
 {
   "outputDirectory": "logistics_system/web",
-  "routes": [
-    { "src": "/api/(.*)", "dest": "logistics_system/api/main.py" },
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+  "functions": {
+    "logistics_system/api/main.py": {
+      "runtime": "python3.12"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/logistics_system/api/main.py" },
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/(.*)", "destination": "/$1" }
   ]
 }

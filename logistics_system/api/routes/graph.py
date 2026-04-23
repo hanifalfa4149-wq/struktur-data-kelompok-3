@@ -1,8 +1,9 @@
-from api.db import get_client
-from api.state import load_logistics_service
-from api.sync import sync_graph
 from fastapi import APIRouter, Query
 from pydantic import BaseModel
+
+from logistics_system.api.db import get_client
+from logistics_system.api.state import load_logistics_service
+from logistics_system.api.sync import sync_graph
 
 router = APIRouter(prefix="/api/graph", tags=["graph"])
 

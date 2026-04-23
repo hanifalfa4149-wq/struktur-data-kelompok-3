@@ -1,8 +1,9 @@
-from api.db import get_client
-from api.state import load_logistics_service
-from api.sync import sync_active_trucks, sync_truck_queue
 from fastapi import APIRouter
 from pydantic import BaseModel
+
+from logistics_system.api.db import get_client
+from logistics_system.api.state import load_logistics_service
+from logistics_system.api.sync import sync_active_trucks, sync_truck_queue
 
 router = APIRouter(prefix="/api/queue", tags=["queue"])
 

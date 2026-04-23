@@ -2,14 +2,14 @@
 
 from collections import defaultdict
 
-from api.db import get_client
-from core.graph import CityGraph
-from core.inventory import Inventory
-from core.linked_list import CourierRoute
-from core.queue import TruckQueue
-from core.stack import LoadStack
-from core.tree import WarehouseTree
-from services.logistics import LogisticsService
+from logistics_system.api.db import get_client
+from logistics_system.core.graph import CityGraph
+from logistics_system.core.inventory import Inventory
+from logistics_system.core.linked_list import CourierRoute
+from logistics_system.core.queue import TruckQueue
+from logistics_system.core.stack import LoadStack
+from logistics_system.core.tree import WarehouseTree
+from logistics_system.services.logistics import LogisticsService
 
 
 def _fetch_table(table_name: str, order_by: str | None = None) -> list[dict]:

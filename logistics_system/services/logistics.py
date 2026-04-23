@@ -1,11 +1,19 @@
 """Lapisan service yang mengorkestrasi seluruh operasi sistem logistik."""
 
-from core.graph import CityGraph
-from core.inventory import Inventory
-from core.linked_list import CourierRoute
-from core.queue import TruckQueue
-from core.stack import LoadStack
-from core.tree import WarehouseTree
+try:
+    from logistics_system.core.graph import CityGraph
+    from logistics_system.core.inventory import Inventory
+    from logistics_system.core.linked_list import CourierRoute
+    from logistics_system.core.queue import TruckQueue
+    from logistics_system.core.stack import LoadStack
+    from logistics_system.core.tree import WarehouseTree
+except ImportError:  # pragma: no cover
+    from core.graph import CityGraph
+    from core.inventory import Inventory
+    from core.linked_list import CourierRoute
+    from core.queue import TruckQueue
+    from core.stack import LoadStack
+    from core.tree import WarehouseTree
 
 
 class LogisticsService:
