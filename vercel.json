@@ -1,11 +1,8 @@
 {
-  "builds": [
-    { "src": "logistics_system/api/main.py", "use": "@vercel/python" },
-    { "src": "logistics_system/web/**", "use": "@vercel/static" }
-  ],
+  "outputDirectory": "logistics_system/web",
   "routes": [
     { "src": "/api/(.*)", "dest": "logistics_system/api/main.py" },
-    { "src": "/", "dest": "logistics_system/web/index.html" },
-    { "src": "/(.*)", "dest": "logistics_system/web/$1" }
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
