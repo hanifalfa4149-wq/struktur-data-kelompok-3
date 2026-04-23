@@ -1,1 +1,1 @@
-"""Service layer for logistics orchestration."""
+"""Lapisan service untuk orkestrasi logistik."""

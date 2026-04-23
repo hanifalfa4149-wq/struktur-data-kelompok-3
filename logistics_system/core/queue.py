@@ -1,4 +1,4 @@
-"""Antrean truk loading dock."""
+"""Antrean truk dermaga muat."""
 
 from collections import deque
 
@@ -7,31 +7,31 @@ class TruckQueue:
     """Queue FIFO untuk antrean truk."""
 
     def __init__(self) -> None:
-        """Initialize empty queue."""
+        """Inisialisasi queue kosong."""
         self.queue = deque()
 
     def enqueue(self, plat_nomor: str) -> None:
-        """Add a truck plate number to the queue tail."""
+        """Menambahkan nomor plat truk ke bagian belakang queue."""
         self.queue.append(plat_nomor)
 
     def dequeue(self) -> str | None:
-        """Remove and return the first truck plate, or None when empty."""
+        """Menghapus dan mengembalikan plat truk pertama, atau None jika kosong."""
         if self.is_empty():
             return None
         return self.queue.popleft()
 
     def peek(self) -> str | None:
-        """Return first truck plate without removing it."""
+        """Mengembalikan plat truk pertama tanpa menghapusnya."""
         if self.is_empty():
             return None
         return self.queue[0]
 
     def is_empty(self) -> bool:
-        """Check whether queue is empty."""
+        """Memeriksa apakah queue kosong."""
         return len(self.queue) == 0
 
     def display_queue(self) -> None:
-        """Print queue as numbered list."""
+        """Mencetak queue sebagai daftar bernomor."""
         if self.is_empty():
             print("Antrean kosong")
             return
@@ -40,7 +40,7 @@ class TruckQueue:
             print(f"{idx}. {plat}")
 
     def load_from_list(self, data: list) -> None:
-        """Hydrate queue from list data."""
+        """Membentuk ulang queue dari data list."""
         self.queue = deque()
         if not isinstance(data, list):
             return
@@ -48,7 +48,7 @@ class TruckQueue:
             self.queue.append(str(plat))
 
     def load_from_dict(self, data: dict) -> None:
-        """Compatibility loader required by core conventions."""
+        """Pemuat kompatibilitas yang dibutuhkan oleh konvensi inti."""
         if isinstance(data, list):
             self.load_from_list(data)
             return
@@ -58,9 +58,9 @@ class TruckQueue:
         self.load_from_list([])
 
     def to_list(self) -> list:
-        """Serialize queue into JSON-safe list."""
+        """Menyerialisasi queue ke list yang aman untuk JSON."""
         return list(self.queue)
 
     def __repr__(self) -> str:
-        """Return debug representation of queue state."""
+        """Mengembalikan representasi penelusuran dari state queue."""
         return f"TruckQueue(size={len(self.queue)})"

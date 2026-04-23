@@ -2,21 +2,21 @@
 
 
 class Inventory:
-    """Store stok barang per gudang."""
+    """Menyimpan stok barang per gudang."""
 
     def __init__(self) -> None:
-        """Initialize empty inventory data."""
+        """Inisialisasi data inventaris kosong."""
         self.data = {}
 
     def cek_stok(self, gudang_id, barang_id) -> dict | None:
-        """Return item record from a warehouse, or None if missing."""
+        """Mengembalikan data barang dari gudang, atau None jika tidak ada."""
         gudang = self.data.get(gudang_id)
         if gudang is None:
             return None
         return gudang.get(barang_id)
 
     def kurangi_stok(self, gudang_id, barang_id, qty) -> bool:
-        """Reduce stock quantity if available."""
+        """Mengurangi jumlah stok jika tersedia."""
         if qty is None or qty <= 0:
             return False
 
@@ -32,7 +32,7 @@ class Inventory:
         return True
 
     def tambah_stok(self, gudang_id, barang_id, qty) -> None:
-        """Add stock quantity, creating warehouse/item if needed."""
+        """Menambah jumlah stok, membuat gudang/barang bila diperlukan."""
         if qty is None or qty <= 0:
             return
 
@@ -41,7 +41,7 @@ class Inventory:
         barang["stok"] = int(barang.get("stok", 0)) + int(qty)
 
     def tampilkan_inventaris(self, gudang_id) -> None:
-        """Print all inventory records for a warehouse."""
+        """Mencetak semua data inventaris untuk sebuah gudang."""
         gudang = self.data.get(gudang_id, {})
         if not gudang:
             print("Inventaris kosong")
@@ -53,7 +53,7 @@ class Inventory:
             print(f"{idx}. {barang_id} - {nama}: {stok}")
 
     def load_from_dict(self, data) -> None:
-        """Hydrate inventory from a dictionary."""
+        """Membentuk ulang inventaris dari sebuah dictionary."""
         self.data = {}
         if not isinstance(data, dict):
             return
@@ -72,7 +72,7 @@ class Inventory:
                 }
 
     def to_dict(self) -> dict:
-        """Return a JSON-safe copy of inventory data."""
+        """Mengembalikan salinan data inventaris yang aman untuk JSON."""
         return {
             gudang_id: {
                 barang_id: {
@@ -85,5 +85,5 @@ class Inventory:
         }
 
     def __repr__(self) -> str:
-        """Return debug representation of inventory state."""
+        """Mengembalikan representasi penelusuran dari state inventaris."""
         return f"Inventory(gudang={len(self.data)})"

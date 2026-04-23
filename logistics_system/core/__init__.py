@@ -1,1 +1,1 @@
-"""Core data structure modules for the logistics system."""
+"""Modul struktur data inti untuk sistem logistik."""

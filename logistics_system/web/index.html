@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Logistik Terintegrasi</title>
+    <style>
+      :root {
+        --navy-900: #0f1f3d;
+        --navy-800: #1a2d52;
+        --blue-500: #1f74ff;
+        --blue-600: #145ee0;
+        --text-900: #12213d;
+        --text-700: #475b82;
+        --surface: #ffffff;
+        --border: #d7deef;
+        --bg: #eef3fb;
+        --ok: #0b8b42;
+        --err: #c42727;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-900);
+        background: linear-gradient(180deg, #e7eef9 0%, #f5f8ff 100%);
+      }
+
+      .layout {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 260px 1fr;
+      }
+
+      .sidebar {
+        background: linear-gradient(180deg, var(--navy-900), var(--navy-800));
+        color: #ecf2ff;
+        padding: 24px 18px;
+      }
+
+      .brand-title {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+
+      .brand-subtitle {
+        margin-top: 8px;
+        color: #c4d4ff;
+        font-size: 0.9rem;
+      }
+
+      .tabs {
+        margin-top: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .tab-btn {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: #dce8ff;
+        text-align: left;
+        padding: 10px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .tab-btn:hover,
+      .tab-btn.active {
+        background: rgba(255, 255, 255, 0.13);
+        color: #fff;
+      }
+
+      .main {
+        padding: 22px;
+      }
+
+      .header {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 18px;
+      }
+
+      .header h1 {
+        margin: 0;
+      }
+
+      .subtitle {
+        margin: 8px 0 0;
+        color: var(--text-700);
+      }
+
+      .panel {
+        display: none;
+        margin-top: 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+      }
+
+      .panel.active {
+        display: block;
+      }
+
+      .panel h2 {
+        margin-top: 0;
+      }
+
+      .grid {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      }
+
+      form {
+        margin: 10px 0;
+      }
+
+      input,
+      button {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        font-size: 0.95rem;
+      }
+
+      button {
+        background: var(--blue-500);
+        border-color: var(--blue-500);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: var(--blue-600);
+      }
+
+      button:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+      }
+
+      .inline-row {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+
+      .result-box {
+        margin-top: 10px;
+        border: 1px dashed var(--border);
+        border-radius: 8px;
+        padding: 10px;
+        min-height: 54px;
+        background: #fbfdff;
+      }
+
+      .muted {
+        color: #63769b;
+        font-size: 0.9rem;
+      }
+
+      .text-success {
+        color: var(--ok);
+      }
+
+      .text-error {
+        color: var(--err);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid var(--border);
+        padding: 8px;
+        text-align: left;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      .badge.pusat {
+        background: #ffe6bd;
+        color: #8c5200;
+      }
+
+      .badge.regional {
+        background: #d8edff;
+        color: #0c4a83;
+      }
+
+      .badge.gudang {
+        background: #dff7e6;
+        color: #0d6b2f;
+      }
+
+      .path-chain {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .path-node {
+        padding: 4px 10px;
+        border-radius: 14px;
+        background: #dce9ff;
+        color: #0f3f8c;
+        font-weight: 600;
+      }
+
+      .path-arrow {
+        color: #47679f;
+      }
+
+      .footer {
+        margin-top: 14px;
+        color: var(--text-700);
+        font-size: 0.9rem;
+      }
+
+      #toast-container {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        display: grid;
+        gap: 8px;
+        z-index: 9999;
+      }
+
+      .toast {
+        min-width: 210px;
+        max-width: 320px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        color: #fff;
+        opacity: 0;
+        transform: translateY(-5px);
+        transition: all 0.18s ease;
+      }
+
+      .toast.success {
+        background: #1f8a4c;
+      }
+
+      .toast.error {
+        background: #c53c3c;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          padding-bottom: 16px;
+        }
+
+        .tabs {
+          flex-direction: row;
+          overflow-x: auto;
+          margin-top: 14px;
+        }
+
+        .tab-btn {
+          white-space: nowrap;
+          min-width: 132px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h2 class="brand-title">Sistem Logistik Terintegrasi</h2>
+        <p class="brand-subtitle">Dashboard operasional multi-modul</p>
+
+        <nav class="tabs">
+          <button class="tab-btn" data-tab="hierarki">Hierarki</button>
+          <button class="tab-btn" data-tab="inventaris">Inventaris</button>
+          <button class="tab-btn" data-tab="antrean">Antrean</button>
+          <button class="tab-btn" data-tab="stack">Muat &amp; Undo</button>
+          <button class="tab-btn" data-tab="kurir">Kurir</button>
+          <button class="tab-btn" data-tab="peta">Peta</button>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <section class="header">
+          <h1>Sistem Logistik Terintegrasi</h1>
+          <p class="subtitle">
+            Monitoring dan operasi struktur data logistik dalam satu dashboard
+            presentasi.
+          </p>
+        </section>
+
+        <section id="panel-hierarki" class="panel">
+          <h2>Modul Hierarki Gudang</h2>
+          <form id="tree-children-form" class="inline-row">
+            <input id="tree-node-id" placeholder="node_id" />
+            <button type="submit">Lihat Children</button>
+          </form>
+          <div id="tree-info" class="muted"></div>
+          <div id="tree-result" class="result-box"></div>
+        </section>
+
+        <section id="panel-inventaris" class="panel">
+          <h2>Modul Inventaris</h2>
+          <form id="inventory-gudang-form" class="inline-row">
+            <input id="inv-gudang-id" placeholder="gudang_id" />
+            <button type="submit">Muat Inventaris Gudang</button>
+          </form>
+          <form id="inventory-item-form" class="inline-row">
+            <input id="inv-item-gudang-id" placeholder="gudang_id" />
+            <input id="inv-barang-id" placeholder="barang_id" />
+            <button type="submit">Cek Barang</button>
+          </form>
+          <div id="inventory-info" class="muted"></div>
+          <div id="inventory-result" class="result-box"></div>
+        </section>
+
+        <section id="panel-antrean" class="panel">
+          <h2>Modul Antrean Truk</h2>
+          <form id="queue-enqueue-form" class="inline-row">
+            <input id="queue-plat-nomor" placeholder="plat_nomor" />
+            <button type="submit">Daftarkan</button>
+          </form>
+          <button id="queue-process-btn" type="button">
+            Proses Truk Berikutnya
+          </button>
+          <div id="queue-info" class="muted"></div>
+          <div id="queue-result" class="result-box"></div>
+        </section>
+
+        <section id="panel-stack" class="panel">
+          <h2>Modul Muat &amp; Undo</h2>
+          <form id="stack-view-form" class="inline-row">
+            <input id="stack-view-plat" placeholder="plat_nomor" />
+            <button type="submit">Lihat Muatan</button>
+          </form>
+          <form id="stack-load-form" class="inline-row">
+            <input id="stack-load-plat" placeholder="plat_nomor" />
+            <input id="stack-load-gudang" placeholder="gudang_id" />
+            <input id="stack-load-barang" placeholder="barang_id" />
+            <input id="stack-load-qty" type="number" placeholder="qty" />
+            <button type="submit">Muat</button>
+          </form>
+          <form id="stack-undo-form" class="inline-row">
+            <input id="stack-undo-plat" placeholder="plat_nomor" />
+            <input id="stack-undo-gudang" placeholder="gudang_id" />
+            <button type="submit">Undo</button>
+          </form>
+          <div id="stack-info" class="muted"></div>
+          <div id="stack-result" class="result-box"></div>
+        </section>
+
+        <section id="panel-kurir" class="panel">
+          <h2>Modul Kurir</h2>
+          <form id="courier-view-form" class="inline-row">
+            <input id="courier-view-id" placeholder="kurir_id" />
+            <button type="submit">Lihat Rute</button>
+          </form>
+          <form id="courier-create-form" class="inline-row">
+            <input id="courier-create-id" placeholder="kurir_id" />
+            <button type="submit">Buat Rute Baru</button>
+          </form>
+          <form id="courier-add-form" class="inline-row">
+            <input id="courier-add-id" placeholder="kurir_id" />
+            <input id="courier-paket-id" placeholder="paket_id" />
+            <input id="courier-alamat" placeholder="alamat" />
+            <input id="courier-penerima" placeholder="penerima" />
+            <button type="submit">Tambah Paket</button>
+          </form>
+          <form id="courier-delivered-form" class="inline-row">
+            <input id="courier-delivered-id" placeholder="kurir_id" />
+            <button type="submit">Selesai Antar</button>
+          </form>
+          <div id="courier-info" class="muted"></div>
+          <div id="courier-result" class="result-box"></div>
+        </section>
+
+        <section id="panel-peta" class="panel">
+          <h2>Modul Peta Kota</h2>
+          <form id="graph-path-form" class="inline-row">
+            <input id="graph-path-kota-a" placeholder="kota_a" />
+            <input id="graph-path-kota-b" placeholder="kota_b" />
+            <button type="submit">Cari Jalur</button>
+          </form>
+          <form id="graph-add-route-form" class="inline-row">
+            <input id="graph-add-kota-a" placeholder="kota_a" />
+            <input id="graph-add-kota-b" placeholder="kota_b" />
+            <input id="graph-add-jarak" type="number" placeholder="jarak_km" />
+            <button type="submit">Tambah Rute</button>
+          </form>
+          <div id="graph-info" class="muted"></div>
+          <div id="graph-path-result" class="result-box"></div>
+          <div id="graph-result" class="result-box"></div>
+        </section>
+
+        <footer class="footer">Capstone — Struktur Data</footer>
+      </main>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>

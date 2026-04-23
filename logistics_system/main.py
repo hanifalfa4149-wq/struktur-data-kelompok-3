@@ -1,4 +1,4 @@
-"""Entry point CLI sistem logistik."""
+"""Titik masuk CLI sistem logistik."""
 
 import sys
 
@@ -27,7 +27,7 @@ except ImportError:  # pragma: no cover
 
 
 def _baca_input(prompt: str) -> str | None:
-    """Read input safely and return None when invalid."""
+    """Membaca input dengan aman dan mengembalikan None jika tidak valid."""
     try:
         return input(prompt).strip()
     except Exception:
@@ -35,7 +35,7 @@ def _baca_input(prompt: str) -> str | None:
 
 
 def _pause() -> None:
-    """Pause screen before returning to menu."""
+    """Menjeda layar sebelum kembali ke menu."""
     try:
         input("\nTekan Enter untuk kembali...")
     except Exception:
@@ -43,7 +43,7 @@ def _pause() -> None:
 
 
 def _hydrate_service() -> LogisticsService:
-    """Load persisted state and hydrate all runtime objects."""
+    """Memuat state tersimpan dan membentuk ulang semua objek program."""
     state = load_state("data/seed.json")
 
     tree = WarehouseTree()
@@ -166,7 +166,7 @@ def menu_inventaris(svc: LogisticsService) -> None:
 
 
 def menu_antrean(svc: LogisticsService) -> None:
-    """US-03: operasi queue loading dock."""
+    """US-03: operasi queue dermaga muat."""
     while True:
         print("\n=== MENU ANTREAN LOADING DOCK ===")
         print("[1] Daftarkan truk baru")
@@ -207,7 +207,7 @@ def menu_antrean(svc: LogisticsService) -> None:
 
 
 def menu_muat_undo(svc: LogisticsService) -> None:
-    """US-04/US-05: stack loading dan undo."""
+    """US-04/US-05: operasi stack muat dan batalkan."""
     while True:
         print("\n=== MENU MUAT BARANG & UNDO ===")
         print("[1] Muat barang ke truk aktif")
@@ -413,7 +413,7 @@ def menu_peta(svc: LogisticsService) -> None:
 
 
 def main() -> None:
-    """Run full CLI menu loop."""
+    """Menjalankan loop menu CLI utama secara penuh."""
     svc = _hydrate_service()
 
     while True:

@@ -5,35 +5,35 @@ class LoadStack:
     """Representasi stack muatan per truk."""
 
     def __init__(self) -> None:
-        """Initialize empty stack."""
+        """Inisialisasi stack kosong."""
         self.items = []
 
     def push(self, barang_id: str, qty: int) -> None:
-        """Push item pair into stack."""
+        """Menambahkan pasangan item ke stack."""
         if qty is None or qty <= 0:
             return
         self.items.append([barang_id, int(qty)])
 
     def pop(self) -> tuple | None:
-        """Pop top item as tuple, or None when empty."""
+        """Mengambil item teratas sebagai tuple, atau None jika kosong."""
         if self.is_empty():
             return None
         barang_id, qty = self.items.pop()
         return barang_id, qty
 
     def peek(self) -> tuple | None:
-        """Peek top item as tuple, or None when empty."""
+        """Melihat item teratas sebagai tuple, atau None jika kosong."""
         if self.is_empty():
             return None
         barang_id, qty = self.items[-1]
         return barang_id, qty
 
     def is_empty(self) -> bool:
-        """Check whether stack is empty."""
+        """Memeriksa apakah stack kosong."""
         return len(self.items) == 0
 
     def display_stack(self) -> None:
-        """Print stack from top to bottom."""
+        """Mencetak stack dari atas ke bawah."""
         if self.is_empty():
             print("Stack kosong")
             return
@@ -44,7 +44,7 @@ class LoadStack:
             nomor += 1
 
     def load_from_list(self, data: list) -> None:
-        """Hydrate stack from list pairs."""
+        """Membentuk ulang stack dari pasangan list."""
         self.items = []
         if not isinstance(data, list):
             return
@@ -55,7 +55,7 @@ class LoadStack:
                 self.items.append([str(barang_id), int(qty)])
 
     def load_from_dict(self, data: dict) -> None:
-        """Compatibility loader required by core conventions."""
+        """Pemuat kompatibilitas yang dibutuhkan oleh konvensi inti."""
         if isinstance(data, list):
             self.load_from_list(data)
             return
@@ -65,9 +65,9 @@ class LoadStack:
         self.load_from_list([])
 
     def to_list(self) -> list:
-        """Serialize stack into list of [barang_id, qty]."""
+        """Menyerialisasi stack ke list [barang_id, qty]."""
         return [[barang_id, qty] for barang_id, qty in self.items]
 
     def __repr__(self) -> str:
-        """Return debug representation of stack state."""
+        """Mengembalikan representasi penelusuran dari state stack."""
         return f"LoadStack(size={len(self.items)})"

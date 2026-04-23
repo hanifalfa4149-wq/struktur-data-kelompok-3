@@ -2,15 +2,15 @@
 
 
 class WarehouseTree:
-    """Representasi hierarki gudang dengan lookup O(1)."""
+    """Representasi hierarki gudang dengan pencarian O(1)."""
 
     def __init__(self) -> None:
-        """Initialize empty tree."""
+        """Inisialisasi tree kosong."""
         self.nodes = {}
         self.root_id = None
 
     def add_node(self, parent_id, node_id, name, type) -> None:
-        """Add node under parent_id, or set as root when parent_id is None."""
+        """Menambahkan node di bawah parent_id, atau set sebagai root jika parent_id None."""
         if node_id in self.nodes:
             raise ValueError(f"Node dengan id '{node_id}' sudah ada")
 
@@ -30,7 +30,7 @@ class WarehouseTree:
         }
 
     def get_children(self, node_id) -> list[dict]:
-        """Return child node dictionaries for node_id."""
+        """Mengembalikan dictionary node anak untuk node_id."""
         node = self.nodes.get(node_id)
         if node is None:
             return []
@@ -50,12 +50,12 @@ class WarehouseTree:
         return result
 
     def find_node(self, node_id) -> dict | None:
-        """Find node by id using O(1) dictionary lookup."""
+        """Mencari node berdasarkan id dengan lookup dictionary O(1)."""
         return self.nodes.get(node_id)
 
     def display_tree(self, node_id=None, indent=0, is_last=True, prefix="") -> None:
-        """Display tree recursively using DFS and +-- formatting."""
-        del is_last  # kept for signature compatibility
+        """Menampilkan tree secara rekursif dengan DFS dan format +--."""
+        del is_last  # dipertahankan untuk kompatibilitas signature
         del prefix
 
         start_id = self.root_id if node_id is None else node_id
@@ -82,7 +82,7 @@ class WarehouseTree:
         _display_children(start_id, base_prefix + "  ")
 
     def load_from_dict(self, data: dict) -> None:
-        """Load nested tree dict into flat node storage."""
+        """Memuat nested tree dict ke penyimpanan node flat."""
         self.nodes = {}
         self.root_id = None
 
@@ -115,7 +115,7 @@ class WarehouseTree:
         _walk(data)
 
     def to_dict(self) -> dict:
-        """Serialize flat storage into nested tree dict."""
+        """Menyerialisasi penyimpanan flat ke nested tree dict."""
         if self.root_id is None or self.root_id not in self.nodes:
             return {}
 
@@ -135,5 +135,5 @@ class WarehouseTree:
         return _build(self.root_id)
 
     def __repr__(self) -> str:
-        """Return debug representation of the tree."""
+        """Mengembalikan representasi penelusuran dari tree."""
         return f"WarehouseTree(root_id={self.root_id!r}, " f"nodes={len(self.nodes)})"

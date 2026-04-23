@@ -4,14 +4,14 @@ from collections import deque
 
 
 class CityGraph:
-    """Weighted adjacency list graph for logistics city routes."""
+    """Graph weighted adjacency list untuk rute kota logistik."""
 
     def __init__(self) -> None:
-        """Initialize empty city graph."""
+        """Inisialisasi graph kota kosong."""
         self.adjacency = {}
 
     def tambah_rute(self, kota_a, kota_b, jarak) -> None:
-        """Add bidirectional route between two cities."""
+        """Menambahkan rute dua arah antara dua kota."""
         if kota_a is None or kota_b is None:
             return
 
@@ -25,14 +25,14 @@ class CityGraph:
             self.adjacency[kota_b].append((kota_a, jarak_int))
 
     def cek_koneksi_langsung(self, kota_a, kota_b) -> bool:
-        """Check whether kota_a has a direct edge to kota_b."""
+        """Memeriksa apakah kota_a memiliki edge langsung ke kota_b."""
         for neighbor, _ in self.adjacency.get(kota_a, []):
             if neighbor == kota_b:
                 return True
         return False
 
     def cari_jalur(self, kota_a, kota_b) -> list[str] | None:
-        """Find a path using BFS and return list of city names."""
+        """Mencari jalur menggunakan BFS dan mengembalikan list nama kota."""
         if kota_a not in self.adjacency or kota_b not in self.adjacency:
             return None
 
@@ -52,7 +52,7 @@ class CityGraph:
         return None
 
     def tampilkan_peta(self) -> None:
-        """Print adjacency list with distance labels."""
+        """Mencetak adjacency list beserta label jarak."""
         if not self.adjacency:
             print("Peta kosong")
             return
@@ -67,7 +67,7 @@ class CityGraph:
             print(f"{kota}: {detail}")
 
     def load_from_dict(self, data: dict) -> None:
-        """Hydrate graph from serialized adjacency dictionary."""
+        """Membentuk ulang graph dari dictionary adjacency yang sudah terserialisasi."""
         self.adjacency = {}
         if not isinstance(data, dict):
             return
@@ -83,12 +83,12 @@ class CityGraph:
                     self.adjacency[kota].append((neighbor, int(jarak)))
 
     def to_dict(self) -> dict:
-        """Serialize adjacency data into JSON-safe format."""
+        """Menyerialisasi data adjacency ke format yang aman untuk JSON."""
         return {
             kota: [[neighbor, jarak] for neighbor, jarak in neighbors]
             for kota, neighbors in self.adjacency.items()
         }
 
     def __repr__(self) -> str:
-        """Return debug representation of graph state."""
+        """Mengembalikan representasi penelusuran dari state graph."""
         return f"CityGraph(cities={len(self.adjacency)})"

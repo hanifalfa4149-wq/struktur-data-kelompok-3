@@ -1,4 +1,4 @@
-"""Load and save logistics system state as JSON."""
+"""Memuat dan menyimpan state sistem logistik dalam format JSON."""
 
 import json
 
@@ -12,7 +12,7 @@ def save_state(
     graph,
     filepath="data/seed.json",
 ) -> None:
-    """Persist runtime objects into JSON state."""
+    """Menyimpan objek saat program berjalan ke state JSON."""
     state = {
         "tree": tree.to_dict(),
         "inventory": inventory.data,
@@ -34,7 +34,7 @@ def save_state(
 
 
 def load_state(filepath="data/seed.json") -> dict:
-    """Load raw JSON state for hydration by the caller."""
+    """Memuat state JSON mentah untuk dibentuk ulang oleh pemanggil."""
     try:
         with open(filepath, "r", encoding="utf-8") as file:
             return json.load(file)

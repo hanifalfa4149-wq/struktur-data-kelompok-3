@@ -2,10 +2,10 @@
 
 
 class Node:
-    """Single node untuk data paket rute kurir."""
+    """Node tunggal untuk data paket rute kurir."""
 
     def __init__(self, paket_id, alamat, penerima):
-        """Initialize paket node."""
+        """Inisialisasi node paket."""
         self.paket_id = paket_id
         self.alamat = alamat
         self.penerima = penerima
@@ -16,12 +16,12 @@ class CourierRoute:
     """Linked list sederhana untuk antrean pengantaran kurir."""
 
     def __init__(self) -> None:
-        """Initialize empty route."""
+        """Inisialisasi rute kosong."""
         self.head = None
         self.size = 0
 
     def tambah_paket(self, paket_id, alamat, penerima) -> None:
-        """Append a new package node at the tail."""
+        """Menambahkan node paket baru di bagian akhir."""
         new_node = Node(paket_id, alamat, penerima)
         if self.head is None:
             self.head = new_node
@@ -35,7 +35,7 @@ class CourierRoute:
         self.size += 1
 
     def selesai_antar(self) -> dict | None:
-        """Remove head package and return it as dict."""
+        """Menghapus paket di kepala list dan mengembalikannya sebagai dict."""
         if self.head is None:
             return None
 
@@ -49,7 +49,7 @@ class CourierRoute:
         }
 
     def sisipkan_paket(self, posisi, paket_id, alamat, penerima) -> None:
-        """Insert package node at position, append when position >= size."""
+        """Menyisipkan node paket di posisi tertentu, append jika posisi >= size."""
         if posisi <= 0 or self.head is None:
             new_node = Node(paket_id, alamat, penerima)
             new_node.next = self.head
@@ -74,7 +74,7 @@ class CourierRoute:
             self.size += 1
 
     def hapus_paket(self, paket_id) -> bool:
-        """Delete first package by paket_id."""
+        """Menghapus paket pertama berdasarkan paket_id."""
         if self.head is None:
             return False
 
@@ -95,7 +95,7 @@ class CourierRoute:
         return False
 
     def tampilkan_rute(self) -> None:
-        """Print route as numbered list from head to tail."""
+        """Mencetak rute sebagai daftar bernomor dari head ke tail."""
         if self.head is None:
             print("Rute kosong")
             return
@@ -110,7 +110,7 @@ class CourierRoute:
             current = current.next
 
     def load_from_list(self, data: list) -> None:
-        """Hydrate route from list of dict packages."""
+        """Membentuk ulang rute dari list paket berbentuk dict."""
         self.head = None
         self.size = 0
 
@@ -127,7 +127,7 @@ class CourierRoute:
             )
 
     def load_from_dict(self, data: dict) -> None:
-        """Compatibility loader required by core conventions."""
+        """Pemuat kompatibilitas yang dibutuhkan oleh konvensi inti."""
         if isinstance(data, list):
             self.load_from_list(data)
             return
@@ -137,7 +137,7 @@ class CourierRoute:
         self.load_from_list([])
 
     def to_list(self) -> list[dict]:
-        """Serialize route into list of package dicts."""
+        """Menyerialisasi rute menjadi list dict paket."""
         result = []
         current = self.head
         while current is not None:
@@ -152,5 +152,5 @@ class CourierRoute:
         return result
 
     def __repr__(self) -> str:
-        """Return debug representation of route state."""
+        """Mengembalikan representasi penelusuran dari state rute."""
         return f"CourierRoute(size={self.size})"

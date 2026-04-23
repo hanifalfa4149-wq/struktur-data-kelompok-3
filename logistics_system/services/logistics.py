@@ -1,4 +1,4 @@
-"""Service layer yang mengorkestrasi seluruh operasi sistem logistik."""
+"""Lapisan service yang mengorkestrasi seluruh operasi sistem logistik."""
 
 from core.graph import CityGraph
 from core.inventory import Inventory
@@ -9,7 +9,7 @@ from core.tree import WarehouseTree
 
 
 class LogisticsService:
-    """Koordinator utama untuk operasi lintas data structure."""
+    """Koordinator utama untuk operasi lintas struktur data."""
 
     def __init__(
         self,
@@ -20,7 +20,7 @@ class LogisticsService:
         active_trucks=None,
         courier_routes=None,
     ):
-        """Initialize service dengan dependency yang sudah dihydrate."""
+        """Inisialisasi service dengan dependency yang sudah dibentuk ulang."""
         self.tree = tree
         self.inventory = inventory
         self.truck_queue = truck_queue
@@ -173,7 +173,7 @@ class LogisticsService:
         self.graph.tampilkan_peta()
 
     def __repr__(self) -> str:
-        """Return debug representation of service state."""
+        """Mengembalikan representasi penelusuran dari state service."""
         return (
             "LogisticsService("
             f"active_trucks={len(self.active_trucks)}, "

@@ -1,59 +1,40 @@
-# Integrated Logistics Backend System
+## Web Enhancement Layer (tambahan, tidak mengubah core)
 
-# Capstone Project — Mata Kuliah Struktur Data
+### Stack Tambahan
 
-## Project Identity
+- Backend API : FastAPI (Python) — di folder api/
+- Frontend : Vanilla HTML/CSS/JS — di folder web/
+- Database : Supabase (PostgreSQL)
+- Deploy : Vercel (static FE + Python serverless functions)
 
-- Type: Python 3.x CLI application, pure stdlib only
-- Purpose: Simulate logistics company backend operations (JNE/SiCepat)
-- Interface: Command Line Interface only — no web, no GUI, no REST API
-- Persistence: JSON files only (data/seed.json + storage.py)
+### Arsitektur Request
 
-## Hard Constraints — Never Violate
+- Read operations : FE → Supabase JS SDK langsung
+- Write/mutating : FE → FastAPI (api/) → Supabase → return result
+- Core logic : FastAPI memanggil services/logistics.py (unchanged)
 
-- NO external data structure libraries (no sortedcontainers, networkx, etc.)
-- collections.deque is the ONLY allowed built-in collection (Queue only)
-- All 6 data structures must be implemented from scratch as classes
-- core/ modules have ZERO cross-imports between each other
-- All cross-module logic lives EXCLUSIVELY in services/logistics.py
-- main.py only imports from services/ and storage — never from core/ directly
-- No SQL, no databases — JSON persistence only
+### Supabase Tables
 
-## Module → Data Structure Mapping
+- warehouse_nodes : tree hierarchy (id, name, type, parent_id)
+- inventory_items : stok per gudang (gudang_id, barang_id, nama, stok)
+- truck_queue : antrean truk (id, plat_nomor, joined_at)
+- active_truck_loads : stack per truk (plat_nomor, barang_id, qty, loaded_at)
+- courier_packages : rute kurir (kurir_id, paket_id, alamat, penerima, urutan)
+- city_routes : graph edges (kota_a, kota_b, jarak_km)
 
-- core/tree.py → N-ary Tree (class: WarehouseTree)
-- core/inventory.py → Dictionary / Hash Table (class: Inventory)
-- core/queue.py → Queue FIFO (class: TruckQueue)
-- core/stack.py → Stack LIFO (class: LoadStack)
-- core/linked_list.py → Singly Linked List (class: Node, CourierRoute)
-- core/graph.py → Weighted Adjacency List + BFS (class: CityGraph)
+### Rules untuk api/ folder
 
-## 3 Integration Points — All mediated by services/logistics.py
+- Setiap route file hanya boleh import dari services/ dan db.py
+- db.py adalah satu-satunya file yang tau tentang Supabase
+- Semua endpoint return format: { "success": bool, "message": str, "data": any }
+- Load state dari Supabase di awal setiap request (stateless per request)
+- Gunakan os.environ untuk semua credentials — never hardcode
 
-- IP#1 Undo Load: stack.pop() → inventory.tambah_stok()
-- IP#2 Process Truck: queue.dequeue() → create new LoadStack instance
-- IP#3 Validate Gudang: tree.find_node() → inventory.cek_stok()
+### Rules untuk web/ folder
 
-## Dependency Direction (strictly one-way)
-
-main.py → services/logistics.py → core/\*
-storage.py is cross-cutting — callable from main.py and logistics.py
-
-## Code Style
-
-- User-facing strings: Bahasa Indonesia
-- Code identifiers: English or Bahasa Indonesia snake_case (follow existing pattern)
-- Classes: PascalCase
-- Constants: UPPER_SNAKE_CASE
-- Every public method must have a docstring
-- Methods that can fail: return tuple (bool, str) → (success, message)
-- Never crash on bad user input — always validate and return to menu
-
-## Key Domain IDs
-
-- Warehouse IDs: GDG-SBY, GDG-JKT, GDG-BDG, GDG-MLG, GDG-SMG
-- Regional IDs: REG-TIMUR, REG-BARAT, REG-TENGAH
-- Root ID: PUSAT
-- Item IDs: BRG-001 (Laptop), BRG-002 (Mouse), BRG-003 (Keyboard)
-- Truck plates: string format e.g. B-1234-CD
-- Courier IDs: KUR-01, KUR-02, etc.
+- Vanilla JS only — no frameworks, no npm, no bundler
+- Semua fetch ke API di-centralize di js/api.js
+- Semua Supabase read langsung di-centralize di js/supabase.js
+- Satu JS file per modul (tree.js, inventory.js, dst)
+- SUPABASE_URL dan SUPABASE_ANON_KEY boleh di FE (public key)
+- SUPABASE_SERVICE_KEY tidak boleh pernah ada di FE
