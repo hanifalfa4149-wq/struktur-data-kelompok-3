@@ -10,14 +10,14 @@ function setGraphMessage(message, ok = true) {
 function renderGraphTable(rows) {
   const result = document.getElementById("graph-result");
   if (!rows.length) {
-    result.innerHTML = '<div class="muted">Belum ada rute kota.</div>';
+    result.innerHTML = '<div class="empty-state">📭 Belum ada data</div>';
     return;
   }
 
   const tableRows = rows
     .map(
       (row) =>
-        `<tr><td>${row.kota_a}</td><td>${row.kota_b}</td><td>${row.jarak_km}</td></tr>`,
+        `<tr><td class="mono">${row.kota_a}</td><td class="mono">${row.kota_b}</td><td><span class="km-badge">${row.jarak_km} km</span></td></tr>`,
     )
     .join("");
 
@@ -27,7 +27,7 @@ function renderGraphTable(rows) {
 function renderPath(path) {
   const el = document.getElementById("graph-path-result");
   if (!path || !path.length) {
-    el.innerHTML = '<div class="muted">Jalur belum dicari.</div>';
+    el.innerHTML = '<div class="empty-state">📭 Belum ada data</div>';
     return;
   }
 

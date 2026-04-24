@@ -9,16 +9,13 @@ function renderMessage(text, ok = true) {
 function renderTable(items) {
   const result = document.getElementById("inventory-result");
   if (!items.length) {
-    result.innerHTML = '<div class="muted">Data inventaris kosong.</div>';
+    result.innerHTML = '<div class="empty-state">📭 Belum ada data</div>';
     return;
   }
 
   const rows = items
     .map(
-      (item) =>
-        `<tr><td>${item.barang_id}</td><td>${item.nama || "-"}</td><td>${
-          item.stok ?? 0
-        }</td></tr>`,
+      (item) => `<tr><td class="mono">${item.barang_id}</td><td>${item.nama || "-"}</td><td>${item.stok ?? 0}</td></tr>`,
     )
     .join("");
 

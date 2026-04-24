@@ -4,19 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistem Logistik Terintegrasi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
-        --navy-900: #0f1f3d;
-        --navy-800: #1a2d52;
-        --blue-500: #1f74ff;
-        --blue-600: #145ee0;
-        --text-900: #12213d;
-        --text-700: #475b82;
-        --surface: #ffffff;
-        --border: #d7deef;
-        --bg: #eef3fb;
-        --ok: #0b8b42;
-        --err: #c42727;
+        --bg-primary: #0a0f1e;
+        --bg-secondary: #111827;
+        --bg-sidebar: #060d1a;
+        --accent: #3b82f6;
+        --accent-hover: #2563eb;
+        --accent-success: #10b981;
+        --accent-danger: #ef4444;
+        --accent-warning: #f59e0b;
+        --text-primary: #f9fafb;
+        --text-secondary: #9ca3af;
+        --border: #1f2937;
+        --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+        --panel-max-width: 960px;
       }
 
       * {
@@ -25,272 +33,827 @@
 
       body {
         margin: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        color: var(--text-900);
-        background: linear-gradient(180deg, #e7eef9 0%, #f5f8ff 100%);
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--text-secondary);
+        background:
+          radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.16) 0%, transparent 28%),
+          radial-gradient(circle at 88% 12%, rgba(16, 185, 129, 0.12) 0%, transparent 24%),
+          linear-gradient(160deg, #070d19 0%, #0b1223 58%, #0a1020 100%);
       }
 
       .layout {
         min-height: 100vh;
-        display: grid;
-        grid-template-columns: 260px 1fr;
       }
 
       .sidebar {
-        background: linear-gradient(180deg, var(--navy-900), var(--navy-800));
-        color: #ecf2ff;
-        padding: 24px 18px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 260px;
+        height: 100vh;
+        background: linear-gradient(180deg, var(--bg-sidebar) 0%, #040913 100%);
+        border-right: 1px solid var(--border);
+        padding: 24px 14px;
+        display: flex;
+        flex-direction: column;
+        z-index: 20;
+      }
+
+      .brand {
+        border: 1px solid rgba(59, 130, 246, 0.25);
+        background: linear-gradient(
+          145deg,
+          rgba(59, 130, 246, 0.14),
+          rgba(17, 24, 39, 0.7)
+        );
+        border-radius: 12px;
+        padding: 14px 12px;
       }
 
       .brand-title {
         margin: 0;
-        font-size: 1.2rem;
-        font-weight: 700;
+        color: var(--text-primary);
+        font-size: 1.05rem;
+        font-weight: 800;
+        letter-spacing: 0.02em;
       }
 
       .brand-subtitle {
-        margin-top: 8px;
-        color: #c4d4ff;
-        font-size: 0.9rem;
+        margin: 8px 0 0;
+        color: var(--text-secondary);
+        font-size: 0.8rem;
       }
 
       .tabs {
         margin-top: 24px;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
       }
 
       .tab-btn {
         width: 100%;
-        border: 0;
+        border: 1px solid transparent;
         background: transparent;
-        color: #dce8ff;
+        color: var(--text-secondary);
         text-align: left;
-        padding: 10px 12px;
+        padding: 11px 12px;
         border-radius: 8px;
         cursor: pointer;
         font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        transition: 150ms ease;
       }
 
-      .tab-btn:hover,
+      .tab-btn::before {
+        content: "";
+        position: absolute;
+        left: -14px;
+        top: 6px;
+        bottom: 6px;
+        width: 3px;
+        border-radius: 3px;
+        background: transparent;
+      }
+
+      .tab-btn:hover {
+        color: var(--text-primary);
+        background: rgba(59, 130, 246, 0.1);
+      }
+
       .tab-btn.active {
-        background: rgba(255, 255, 255, 0.13);
-        color: #fff;
+        color: var(--text-primary);
+        background: rgba(59, 130, 246, 0.16);
+        border-color: rgba(59, 130, 246, 0.28);
+      }
+
+      .tab-btn.active::before {
+        background: var(--accent);
+      }
+
+      .tab-icon {
+        font-size: 1rem;
+        line-height: 1;
+      }
+
+      .tab-label {
+        line-height: 1.2;
       }
 
       .main {
-        padding: 22px;
+        margin-left: 260px;
+        min-height: 100vh;
+        padding: 16px 18px 24px;
       }
 
-      .header {
-        background: var(--surface);
+      .topbar {
+        max-width: var(--panel-max-width);
+        margin: 0 auto;
+        background: rgba(17, 24, 39, 0.84);
         border: 1px solid var(--border);
         border-radius: 12px;
-        padding: 18px;
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        box-shadow: var(--card-shadow);
+        position: sticky;
+        top: 12px;
+        z-index: 10;
+        backdrop-filter: blur(8px);
       }
 
-      .header h1 {
-        margin: 0;
+      .breadcrumb {
+        color: var(--text-secondary);
+        font-size: 0.86rem;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
       }
 
-      .subtitle {
-        margin: 8px 0 0;
-        color: var(--text-700);
+      #active-module {
+        color: var(--text-primary);
+        font-weight: 700;
+      }
+
+      #live-clock {
+        color: var(--text-primary);
+        font-weight: 700;
+        font-size: 0.88rem;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.03em;
+      }
+
+      .content-shell {
+        max-width: var(--panel-max-width);
+        margin: 16px auto 0;
       }
 
       .panel {
         display: none;
         margin-top: 14px;
-        background: var(--surface);
+        background: var(--bg-secondary);
         border: 1px solid var(--border);
         border-radius: 12px;
-        padding: 16px;
+        padding: 24px;
+        box-shadow: var(--card-shadow);
       }
 
       .panel.active {
         display: block;
+        animation: panelIn 180ms ease;
       }
 
-      .panel h2 {
-        margin-top: 0;
+      @keyframes panelIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
-      .grid {
+      .card-header {
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 16px;
+        margin-bottom: 16px;
+      }
+
+      .module-title {
+        margin: 0;
+        color: var(--text-primary);
+        font-size: 24px;
+        font-weight: 800;
+        border-left: 4px solid var(--accent);
+        padding-left: 12px;
+      }
+
+      .module-subtitle {
+        margin: 9px 0 0;
+        color: var(--text-secondary);
+      }
+
+      .stat-row {
+        margin-top: 14px;
         display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, max-content));
         gap: 10px;
-        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      }
+
+      .stat-chip {
+        background: #182238;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 6px 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+      }
+
+      .stat-chip-label {
+        color: var(--text-secondary);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+      }
+
+      .stat-chip-value {
+        color: var(--accent);
+        font-size: 1rem;
+        font-weight: 800;
+        min-width: 1.6rem;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
       }
 
       form {
-        margin: 10px 0;
+        margin: 0;
       }
 
-      input,
-      button {
-        width: 100%;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid var(--border);
+      .ops-section {
+        padding: 14px 0;
+      }
+
+      .ops-section + .ops-section {
+        border-top: 1px solid rgba(31, 41, 55, 0.85);
+      }
+
+      .ops-title {
+        margin: 0 0 10px;
+        color: var(--text-primary);
         font-size: 0.95rem;
-      }
-
-      button {
-        background: var(--blue-500);
-        border-color: var(--blue-500);
-        color: #fff;
-        font-weight: 600;
-        cursor: pointer;
-      }
-
-      button:hover {
-        background: var(--blue-600);
-      }
-
-      button:disabled {
-        opacity: 0.65;
-        cursor: not-allowed;
+        font-weight: 700;
       }
 
       .inline-row {
         display: grid;
-        gap: 8px;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+      }
+
+      .field-group {
+        grid-column: span 3;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .field-group.wide {
+        grid-column: span 6;
+      }
+
+      .field-group button {
+        margin-top: auto;
+      }
+
+      label {
+        color: var(--text-secondary);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-weight: 600;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        font-size: 14px;
+        background: #1a2236;
+        color: var(--text-primary);
+        transition: 150ms ease;
+      }
+
+      input::placeholder {
+        color: #6b7280;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      }
+
+      button {
+        width: 100%;
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 150ms ease;
+        position: relative;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+      }
+
+      .btn-primary:hover {
+        background: var(--accent-hover);
+      }
+
+      .btn-success {
+        background: var(--accent-success);
+      }
+
+      .btn-success:hover {
+        filter: brightness(0.94);
+      }
+
+      .btn-danger {
+        background: transparent;
+        border-color: var(--accent-danger);
+        color: var(--accent-danger);
+      }
+
+      .btn-danger:hover {
+        background: var(--accent-danger);
+        color: white;
+      }
+
+      .btn-prominent {
+        margin-top: 12px;
+        padding: 12px 20px;
+        font-size: 0.96rem;
+      }
+
+      button.is-loading {
+        padding-left: 44px;
+      }
+
+      button.is-loading::before {
+        content: "";
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        width: 14px;
+        height: 14px;
+        margin-top: -7px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.36);
+        border-top-color: white;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      button:disabled {
+        opacity: 0.72;
+        cursor: not-allowed;
+      }
+
+      .mono-input {
+        font-family: Consolas, "Courier New", monospace;
+        color: #8bb8ff;
       }
 
       .result-box {
         margin-top: 10px;
-        border: 1px dashed var(--border);
+        border: 1px solid #22324f;
+        border-left: 3px solid var(--accent);
         border-radius: 8px;
-        padding: 10px;
+        padding: 16px;
         min-height: 54px;
-        background: #fbfdff;
+        background: #0d1526;
+        overflow-x: auto;
+      }
+
+      .result-box.state-success {
+        border-left-color: var(--accent-success);
+      }
+
+      .result-box.state-error {
+        border-left-color: var(--accent-danger);
       }
 
       .muted {
-        color: #63769b;
-        font-size: 0.9rem;
+        color: var(--text-secondary);
+        font-size: 0.89rem;
       }
 
       .text-success {
-        color: var(--ok);
+        color: var(--accent-success);
       }
 
       .text-error {
-        color: var(--err);
+        color: var(--accent-danger);
       }
 
       table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 520px;
       }
 
       th,
       td {
         border-bottom: 1px solid var(--border);
-        padding: 8px;
+        padding: 9px 10px;
         text-align: left;
+      }
+
+      th {
+        background: #1a2236;
+        color: var(--text-secondary);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        font-weight: 600;
+      }
+
+      tbody tr {
+        transition: 140ms ease;
+      }
+
+      tbody tr:hover {
+        background: #1a2236;
       }
 
       .badge {
         display: inline-block;
-        padding: 2px 8px;
+        padding: 3px 10px;
         border-radius: 999px;
         font-size: 0.75rem;
         font-weight: 700;
       }
 
       .badge.pusat {
-        background: #ffe6bd;
-        color: #8c5200;
+        background: rgba(59, 130, 246, 0.25);
+        color: #93c5fd;
       }
 
       .badge.regional {
-        background: #d8edff;
-        color: #0c4a83;
+        background: rgba(147, 51, 234, 0.24);
+        color: #d8b4fe;
       }
 
       .badge.gudang {
-        background: #dff7e6;
-        color: #0d6b2f;
+        background: rgba(16, 185, 129, 0.25);
+        color: #86efac;
+      }
+
+      .tree-view {
+        display: grid;
+        gap: 6px;
+      }
+
+      .tree-node {
+        position: relative;
+        border-left: 1px solid #2f405f;
+        padding: 6px 10px 6px 14px;
+        border-radius: 8px;
+        background: rgba(26, 34, 54, 0.56);
+      }
+
+      .tree-node::before {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 50%;
+        width: 10px;
+        border-top: 1px solid #2f405f;
+      }
+
+      .id-mono,
+      .mono {
+        font-family: Consolas, "Courier New", monospace;
+        color: #8bb8ff;
+      }
+
+      .queue-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+
+      .queue-card {
+        min-width: 220px;
+        background: #172033;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 12px;
+      }
+
+      .queue-plate {
+        font-size: 1.02rem;
+        font-family: Consolas, "Courier New", monospace;
+        color: #8bb8ff;
+        font-weight: 700;
+      }
+
+      .queue-joined {
+        margin-top: 4px;
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+      }
+
+      .stack-list,
+      .timeline-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 9px;
+      }
+
+      .stack-item {
+        background: #172033;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .badge-qty {
+        background: rgba(59, 130, 246, 0.18);
+        border: 1px solid rgba(59, 130, 246, 0.45);
+        color: #bfdbfe;
+        border-radius: 999px;
+        padding: 2px 10px;
+        font-weight: 700;
+        font-size: 0.76rem;
+      }
+
+      .undo-pill {
+        margin-left: auto;
+        border: 1px solid rgba(239, 68, 68, 0.55);
+        color: #fca5a5;
+        border-radius: 999px;
+        padding: 2px 8px;
+        font-size: 0.72rem;
+      }
+
+      .timeline-list {
+        position: relative;
+      }
+
+      .timeline-list::before {
+        content: "";
+        position: absolute;
+        left: 7px;
+        top: 6px;
+        bottom: 6px;
+        width: 2px;
+        background: #31415f;
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-left: 28px;
+        background: #172033;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 12px;
+        transition: 180ms ease;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: 2px;
+        top: 17px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--accent);
+        border: 2px solid #1e2c44;
+      }
+
+      .timeline-item.delivered-out {
+        opacity: 0;
+        transform: translateX(16px);
+      }
+
+      .timeline-title {
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      .timeline-sub {
+        margin-top: 4px;
+        color: var(--text-secondary);
+        font-size: 0.86rem;
       }
 
       .path-chain {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
-        gap: 6px;
+        gap: 7px;
       }
 
       .path-node {
-        padding: 4px 10px;
-        border-radius: 14px;
-        background: #dce9ff;
-        color: #0f3f8c;
+        padding: 5px 11px;
+        border-radius: 999px;
+        background: rgba(59, 130, 246, 0.17);
+        border: 1px solid rgba(59, 130, 246, 0.38);
+        color: #bfdbfe;
         font-weight: 600;
       }
 
       .path-arrow {
-        color: #47679f;
+        color: #7aaaf5;
+        font-weight: 700;
+      }
+
+      .km-badge {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        border: 1px solid #3a4c6d;
+        background: #1a2236;
+        padding: 2px 8px;
+        color: #cdd8ec;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+
+      .list-row {
+        padding: 8px 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #172033;
       }
 
       .footer {
         margin-top: 14px;
-        color: var(--text-700);
-        font-size: 0.9rem;
+        color: var(--text-secondary);
+        font-size: 0.84rem;
       }
 
       #toast-container {
         position: fixed;
-        top: 18px;
-        right: 18px;
-        display: grid;
+        right: 16px;
+        bottom: 16px;
+        display: flex;
+        flex-direction: column;
         gap: 8px;
         z-index: 9999;
+        pointer-events: none;
       }
 
       .toast {
         min-width: 210px;
-        max-width: 320px;
-        padding: 10px 12px;
+        max-width: 360px;
+        padding: 11px 12px;
         border-radius: 8px;
-        color: #fff;
+        color: var(--text-primary);
+        background: #182238;
+        border: 1px solid var(--border);
+        border-left-width: 4px;
         opacity: 0;
-        transform: translateY(-5px);
-        transition: all 0.18s ease;
+        transform: translateX(22px);
+        transition: all 220ms ease;
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
 
       .toast.success {
-        background: #1f8a4c;
+        border-left-color: var(--accent-success);
       }
 
       .toast.error {
-        background: #c53c3c;
+        border-left-color: var(--accent-danger);
+      }
+
+      .toast::before {
+        font-size: 0.95rem;
+      }
+
+      .toast.success::before {
+        content: "✅";
+      }
+
+      .toast.error::before {
+        content: "✗";
       }
 
       .toast.show {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
       }
 
-      @media (max-width: 900px) {
-        .layout {
-          grid-template-columns: 1fr;
+      .empty-state {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 78px;
+        color: var(--text-secondary);
+        text-align: center;
+      }
+
+      @media (max-width: 980px) {
+        .inline-row {
+          grid-template-columns: repeat(6, minmax(0, 1fr));
         }
 
+        .field-group {
+          grid-column: span 3;
+        }
+      }
+
+      @media (max-width: 767px) {
         .sidebar {
-          padding-bottom: 16px;
+          top: auto;
+          bottom: 0;
+          width: 100%;
+          height: auto;
+          border-right: none;
+          border-top: 1px solid var(--border);
+          padding: 10px 8px;
+        }
+
+        .brand {
+          display: none;
         }
 
         .tabs {
+          margin-top: 0;
           flex-direction: row;
           overflow-x: auto;
-          margin-top: 14px;
+          gap: 8px;
         }
 
         .tab-btn {
-          white-space: nowrap;
-          min-width: 132px;
+          min-width: 130px;
+          justify-content: center;
+          text-align: center;
+          border-color: rgba(59, 130, 246, 0.22);
+        }
+
+        .tab-btn::before {
+          left: 9px;
+          right: 9px;
+          top: auto;
+          bottom: -4px;
+          width: auto;
+          height: 2px;
+        }
+
+        .main {
+          margin-left: 0;
+          padding: 12px 12px 110px;
+        }
+
+        .topbar {
+          top: 8px;
+          padding: 10px 12px;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .panel {
+          padding: 18px 14px;
+        }
+
+        .inline-row {
+          grid-template-columns: 1fr;
+        }
+
+        .field-group,
+        .field-group.wide {
+          grid-column: span 1;
+        }
+
+        .field-group button,
+        button,
+        .btn-prominent {
+          width: 100%;
+        }
+
+        table {
+          min-width: 460px;
+        }
+
+        #toast-container {
+          left: 12px;
+          right: 12px;
+          bottom: 96px;
         }
       }
     </style>
@@ -298,132 +861,440 @@
   <body>
     <div class="layout">
       <aside class="sidebar">
-        <h2 class="brand-title">Sistem Logistik Terintegrasi</h2>
-        <p class="brand-subtitle">Dashboard operasional multi-modul</p>
+        <div class="brand">
+          <h2 class="brand-title">🚚 Sistem Logistik Terintegrasi</h2>
+          <p class="brand-subtitle">Pusat komando operasional distribusi</p>
+        </div>
 
         <nav class="tabs">
-          <button class="tab-btn" data-tab="hierarki">Hierarki</button>
-          <button class="tab-btn" data-tab="inventaris">Inventaris</button>
-          <button class="tab-btn" data-tab="antrean">Antrean</button>
-          <button class="tab-btn" data-tab="stack">Muat &amp; Undo</button>
-          <button class="tab-btn" data-tab="kurir">Kurir</button>
-          <button class="tab-btn" data-tab="peta">Peta</button>
+          <button class="tab-btn" data-tab="hierarki">
+            <span class="tab-icon">🏢</span>
+            <span class="tab-label">Hierarki</span>
+          </button>
+          <button class="tab-btn" data-tab="inventaris">
+            <span class="tab-icon">📦</span>
+            <span class="tab-label">Inventaris</span>
+          </button>
+          <button class="tab-btn" data-tab="antrean">
+            <span class="tab-icon">🚛</span>
+            <span class="tab-label">Antrean</span>
+          </button>
+          <button class="tab-btn" data-tab="stack">
+            <span class="tab-icon">📋</span>
+            <span class="tab-label">Muat &amp; Undo</span>
+          </button>
+          <button class="tab-btn" data-tab="kurir">
+            <span class="tab-icon">🛵</span>
+            <span class="tab-label">Kurir</span>
+          </button>
+          <button class="tab-btn" data-tab="peta">
+            <span class="tab-icon">🗺️</span>
+            <span class="tab-label">Peta</span>
+          </button>
         </nav>
       </aside>
 
       <main class="main">
-        <section class="header">
-          <h1>Sistem Logistik Terintegrasi</h1>
-          <p class="subtitle">
-            Monitoring dan operasi struktur data logistik dalam satu dashboard
-            presentasi.
-          </p>
+        <section class="topbar">
+          <div class="breadcrumb">
+            Command Center / <span id="active-module">Hierarki</span>
+          </div>
+          <div id="live-clock">--:--:--</div>
         </section>
 
-        <section id="panel-hierarki" class="panel">
-          <h2>Modul Hierarki Gudang</h2>
-          <form id="tree-children-form" class="inline-row">
-            <input id="tree-node-id" placeholder="node_id" />
-            <button type="submit">Lihat Children</button>
-          </form>
-          <div id="tree-info" class="muted"></div>
-          <div id="tree-result" class="result-box"></div>
-        </section>
+        <div class="content-shell">
+          <section id="panel-hierarki" class="panel">
+            <div class="card-header">
+              <h2 class="module-title">Modul Hierarki Gudang</h2>
+              <p class="module-subtitle">
+                Pantau struktur node pusat, regional, dan gudang dalam satu tampilan.
+              </p>
+              <div class="stat-row">
+                <div class="stat-chip">
+                  <span class="stat-chip-label">Total Node</span>
+                  <span id="stat-tree-total" class="stat-chip-value">0</span>
+                </div>
+              </div>
+            </div>
 
-        <section id="panel-inventaris" class="panel">
-          <h2>Modul Inventaris</h2>
-          <form id="inventory-gudang-form" class="inline-row">
-            <input id="inv-gudang-id" placeholder="gudang_id" />
-            <button type="submit">Muat Inventaris Gudang</button>
-          </form>
-          <form id="inventory-item-form" class="inline-row">
-            <input id="inv-item-gudang-id" placeholder="gudang_id" />
-            <input id="inv-barang-id" placeholder="barang_id" />
-            <button type="submit">Cek Barang</button>
-          </form>
-          <div id="inventory-info" class="muted"></div>
-          <div id="inventory-result" class="result-box"></div>
-        </section>
+            <div class="ops-section">
+              <h3 class="ops-title">Cari Anak Node</h3>
+              <form id="tree-children-form" class="inline-row">
+                <div class="field-group wide">
+                  <label for="tree-node-id">Node ID</label>
+                  <input
+                    id="tree-node-id"
+                    class="mono-input"
+                    placeholder="contoh: gdg-sby-01"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="tree-node-id">Aksi</label>
+                  <button type="submit" class="btn-primary">Lihat Children</button>
+                </div>
+              </form>
+            </div>
+            <div id="tree-info" class="muted"></div>
+            <div id="tree-result" class="result-box"></div>
+          </section>
 
-        <section id="panel-antrean" class="panel">
-          <h2>Modul Antrean Truk</h2>
-          <form id="queue-enqueue-form" class="inline-row">
-            <input id="queue-plat-nomor" placeholder="plat_nomor" />
-            <button type="submit">Daftarkan</button>
-          </form>
-          <button id="queue-process-btn" type="button">
-            Proses Truk Berikutnya
-          </button>
-          <div id="queue-info" class="muted"></div>
-          <div id="queue-result" class="result-box"></div>
-        </section>
+          <section id="panel-inventaris" class="panel">
+            <div class="card-header">
+              <h2 class="module-title">Modul Inventaris</h2>
+              <p class="module-subtitle">
+                Lacak stok barang di tiap gudang dan cek detail item secara cepat.
+              </p>
+              <div class="stat-row">
+                <div class="stat-chip">
+                  <span class="stat-chip-label">Total Item</span>
+                  <span id="stat-inventory-count" class="stat-chip-value">0</span>
+                </div>
+              </div>
+            </div>
 
-        <section id="panel-stack" class="panel">
-          <h2>Modul Muat &amp; Undo</h2>
-          <form id="stack-view-form" class="inline-row">
-            <input id="stack-view-plat" placeholder="plat_nomor" />
-            <button type="submit">Lihat Muatan</button>
-          </form>
-          <form id="stack-load-form" class="inline-row">
-            <input id="stack-load-plat" placeholder="plat_nomor" />
-            <input id="stack-load-gudang" placeholder="gudang_id" />
-            <input id="stack-load-barang" placeholder="barang_id" />
-            <input id="stack-load-qty" type="number" placeholder="qty" />
-            <button type="submit">Muat</button>
-          </form>
-          <form id="stack-undo-form" class="inline-row">
-            <input id="stack-undo-plat" placeholder="plat_nomor" />
-            <input id="stack-undo-gudang" placeholder="gudang_id" />
-            <button type="submit">Undo</button>
-          </form>
-          <div id="stack-info" class="muted"></div>
-          <div id="stack-result" class="result-box"></div>
-        </section>
+            <div class="ops-section">
+              <h3 class="ops-title">Muat Inventaris Gudang</h3>
+              <form id="inventory-gudang-form" class="inline-row">
+                <div class="field-group wide">
+                  <label for="inv-gudang-id">Gudang ID</label>
+                  <input
+                    id="inv-gudang-id"
+                    class="mono-input"
+                    placeholder="contoh: gdg-jkt-01"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="inv-gudang-id">Aksi</label>
+                  <button type="submit" class="btn-primary">
+                    Muat Inventaris Gudang
+                  </button>
+                </div>
+              </form>
+            </div>
 
-        <section id="panel-kurir" class="panel">
-          <h2>Modul Kurir</h2>
-          <form id="courier-view-form" class="inline-row">
-            <input id="courier-view-id" placeholder="kurir_id" />
-            <button type="submit">Lihat Rute</button>
-          </form>
-          <form id="courier-create-form" class="inline-row">
-            <input id="courier-create-id" placeholder="kurir_id" />
-            <button type="submit">Buat Rute Baru</button>
-          </form>
-          <form id="courier-add-form" class="inline-row">
-            <input id="courier-add-id" placeholder="kurir_id" />
-            <input id="courier-paket-id" placeholder="paket_id" />
-            <input id="courier-alamat" placeholder="alamat" />
-            <input id="courier-penerima" placeholder="penerima" />
-            <button type="submit">Tambah Paket</button>
-          </form>
-          <form id="courier-delivered-form" class="inline-row">
-            <input id="courier-delivered-id" placeholder="kurir_id" />
-            <button type="submit">Selesai Antar</button>
-          </form>
-          <div id="courier-info" class="muted"></div>
-          <div id="courier-result" class="result-box"></div>
-        </section>
+            <div class="ops-section">
+              <h3 class="ops-title">Cek Barang Spesifik</h3>
+              <form id="inventory-item-form" class="inline-row">
+                <div class="field-group wide">
+                  <label for="inv-item-gudang-id">Gudang ID</label>
+                  <input
+                    id="inv-item-gudang-id"
+                    class="mono-input"
+                    placeholder="contoh: gdg-jkt-01"
+                  />
+                </div>
+                <div class="field-group wide">
+                  <label for="inv-barang-id">Barang ID</label>
+                  <input
+                    id="inv-barang-id"
+                    class="mono-input"
+                    placeholder="contoh: BRG-1002"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="inv-barang-id">Aksi</label>
+                  <button type="submit" class="btn-primary">Cek Barang</button>
+                </div>
+              </form>
+            </div>
 
-        <section id="panel-peta" class="panel">
-          <h2>Modul Peta Kota</h2>
-          <form id="graph-path-form" class="inline-row">
-            <input id="graph-path-kota-a" placeholder="kota_a" />
-            <input id="graph-path-kota-b" placeholder="kota_b" />
-            <button type="submit">Cari Jalur</button>
-          </form>
-          <form id="graph-add-route-form" class="inline-row">
-            <input id="graph-add-kota-a" placeholder="kota_a" />
-            <input id="graph-add-kota-b" placeholder="kota_b" />
-            <input id="graph-add-jarak" type="number" placeholder="jarak_km" />
-            <button type="submit">Tambah Rute</button>
-          </form>
-          <div id="graph-info" class="muted"></div>
-          <div id="graph-path-result" class="result-box"></div>
-          <div id="graph-result" class="result-box"></div>
-        </section>
+            <div id="inventory-info" class="muted"></div>
+            <div id="inventory-result" class="result-box"></div>
+          </section>
 
-        <footer class="footer">Capstone — Struktur Data</footer>
+          <section id="panel-antrean" class="panel">
+            <div class="card-header">
+              <h2 class="module-title">Modul Antrean Truk</h2>
+              <p class="module-subtitle">
+                Atur urutan truk di loading dock dan proses antrean berikutnya.
+              </p>
+              <div class="stat-row">
+                <div class="stat-chip">
+                  <span class="stat-chip-label">Truk Dalam Antrean</span>
+                  <span id="stat-queue-count" class="stat-chip-value">0</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ops-section">
+              <h3 class="ops-title">Daftarkan Truk Baru</h3>
+              <form id="queue-enqueue-form" class="inline-row">
+                <div class="field-group wide">
+                  <label for="queue-plat-nomor">Plat Nomor</label>
+                  <input
+                    id="queue-plat-nomor"
+                    class="mono-input"
+                    placeholder="contoh: L 1234 AB"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="queue-plat-nomor">Aksi</label>
+                  <button type="submit" class="btn-success">Daftarkan</button>
+                </div>
+              </form>
+
+              <button
+                id="queue-process-btn"
+                type="button"
+                class="btn-primary btn-prominent"
+              >
+                🚛 Proses Truk Berikutnya
+              </button>
+            </div>
+
+            <div id="queue-info" class="muted"></div>
+            <div id="queue-result" class="result-box"></div>
+          </section>
+
+          <section id="panel-stack" class="panel">
+            <div class="card-header">
+              <h2 class="module-title">Modul Muat &amp; Undo</h2>
+              <p class="module-subtitle">
+                Kelola tumpukan muatan truk dan rollback operasi terakhir saat diperlukan.
+              </p>
+            </div>
+
+            <div class="ops-section">
+              <h3 class="ops-title">Lihat Stack Muatan</h3>
+              <form id="stack-view-form" class="inline-row">
+                <div class="field-group wide">
+                  <label for="stack-view-plat">Plat Nomor</label>
+                  <input
+                    id="stack-view-plat"
+                    class="mono-input"
+                    placeholder="contoh: N 8899 XY"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="stack-view-plat">Aksi</label>
+                  <button type="submit" class="btn-primary">Lihat Muatan</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="ops-section">
+              <h3 class="ops-title">Muat Barang ke Truk</h3>
+              <form id="stack-load-form" class="inline-row">
+                <div class="field-group">
+                  <label for="stack-load-plat">Plat Nomor</label>
+                  <input
+                    id="stack-load-plat"
+                    class="mono-input"
+                    placeholder="plat_nomor"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="stack-load-gudang">Gudang ID</label>
+                  <input
+                    id="stack-load-gudang"
+                    class="mono-input"
+                    placeholder="gudang_id"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="stack-load-barang">Barang ID</label>
+                  <input
+                    id="stack-load-barang"
+                    class="mono-input"
+                    placeholder="barang_id"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="stack-load-qty">Qty</label>
+                  <input id="stack-load-qty" type="number" placeholder="qty" />
+                </div>
+                <div class="field-group">
+                  <label for="stack-load-plat">Aksi</label>
+                  <button type="submit" class="btn-success">Muat</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="ops-section">
+              <h3 class="ops-title">Undo Muatan Terakhir</h3>
+              <form id="stack-undo-form" class="inline-row">
+                <div class="field-group wide">
+                  <label for="stack-undo-plat">Plat Nomor</label>
+                  <input
+                    id="stack-undo-plat"
+                    class="mono-input"
+                    placeholder="plat_nomor"
+                  />
+                </div>
+                <div class="field-group wide">
+                  <label for="stack-undo-gudang">Gudang ID</label>
+                  <input
+                    id="stack-undo-gudang"
+                    class="mono-input"
+                    placeholder="gudang_id"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="stack-undo-plat">Aksi</label>
+                  <button type="submit" class="btn-danger">Undo</button>
+                </div>
+              </form>
+            </div>
+
+            <div id="stack-info" class="muted"></div>
+            <div id="stack-result" class="result-box"></div>
+          </section>
+
+          <section id="panel-kurir" class="panel">
+            <div class="card-header">
+              <h2 class="module-title">Modul Kurir</h2>
+              <p class="module-subtitle">
+                Susun rute pengantaran dan proses paket berdasarkan urutan prioritas.
+              </p>
+            </div>
+
+            <div class="ops-section">
+              <h3 class="ops-title">Lihat Rute Kurir</h3>
+              <form id="courier-view-form" class="inline-row">
+                <div class="field-group wide">
+                  <label for="courier-view-id">Kurir ID</label>
+                  <input
+                    id="courier-view-id"
+                    class="mono-input"
+                    placeholder="kurir_id"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="courier-view-id">Aksi</label>
+                  <button type="submit" class="btn-primary">Lihat Rute</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="ops-section">
+              <h3 class="ops-title">Buat Rute Baru</h3>
+              <form id="courier-create-form" class="inline-row">
+                <div class="field-group wide">
+                  <label for="courier-create-id">Kurir ID</label>
+                  <input
+                    id="courier-create-id"
+                    class="mono-input"
+                    placeholder="kurir_id"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="courier-create-id">Aksi</label>
+                  <button type="submit" class="btn-success">Buat Rute Baru</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="ops-section">
+              <h3 class="ops-title">Tambah Paket ke Rute</h3>
+              <form id="courier-add-form" class="inline-row">
+                <div class="field-group">
+                  <label for="courier-add-id">Kurir ID</label>
+                  <input
+                    id="courier-add-id"
+                    class="mono-input"
+                    placeholder="kurir_id"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="courier-paket-id">Paket ID</label>
+                  <input
+                    id="courier-paket-id"
+                    class="mono-input"
+                    placeholder="paket_id"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="courier-alamat">Alamat</label>
+                  <input id="courier-alamat" placeholder="alamat" />
+                </div>
+                <div class="field-group">
+                  <label for="courier-penerima">Penerima</label>
+                  <input id="courier-penerima" placeholder="penerima" />
+                </div>
+                <div class="field-group">
+                  <label for="courier-add-id">Aksi</label>
+                  <button type="submit" class="btn-success">Tambah Paket</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="ops-section">
+              <h3 class="ops-title">Selesai Antar Paket Teratas</h3>
+              <form id="courier-delivered-form" class="inline-row">
+                <div class="field-group wide">
+                  <label for="courier-delivered-id">Kurir ID</label>
+                  <input
+                    id="courier-delivered-id"
+                    class="mono-input"
+                    placeholder="kurir_id"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="courier-delivered-id">Aksi</label>
+                  <button type="submit" class="btn-danger">Selesai Antar</button>
+                </div>
+              </form>
+            </div>
+
+            <div id="courier-info" class="muted"></div>
+            <div id="courier-result" class="result-box"></div>
+          </section>
+
+          <section id="panel-peta" class="panel">
+            <div class="card-header">
+              <h2 class="module-title">Modul Peta Kota</h2>
+              <p class="module-subtitle">
+                Kelola konektivitas antar kota dan cari jalur distribusi tercepat.
+              </p>
+            </div>
+
+            <div class="ops-section">
+              <h3 class="ops-title">Cari Jalur Kota</h3>
+              <form id="graph-path-form" class="inline-row">
+                <div class="field-group wide">
+                  <label for="graph-path-kota-a">Kota A</label>
+                  <input id="graph-path-kota-a" placeholder="kota_a" />
+                </div>
+                <div class="field-group wide">
+                  <label for="graph-path-kota-b">Kota B</label>
+                  <input id="graph-path-kota-b" placeholder="kota_b" />
+                </div>
+                <div class="field-group">
+                  <label for="graph-path-kota-a">Aksi</label>
+                  <button type="submit" class="btn-primary">Cari Jalur</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="ops-section">
+              <h3 class="ops-title">Tambah Rute Kota</h3>
+              <form id="graph-add-route-form" class="inline-row">
+                <div class="field-group">
+                  <label for="graph-add-kota-a">Kota A</label>
+                  <input id="graph-add-kota-a" placeholder="kota_a" />
+                </div>
+                <div class="field-group">
+                  <label for="graph-add-kota-b">Kota B</label>
+                  <input id="graph-add-kota-b" placeholder="kota_b" />
+                </div>
+                <div class="field-group">
+                  <label for="graph-add-jarak">Jarak KM</label>
+                  <input id="graph-add-jarak" type="number" placeholder="jarak_km" />
+                </div>
+                <div class="field-group">
+                  <label for="graph-add-kota-a">Aksi</label>
+                  <button type="submit" class="btn-success">Tambah Rute</button>
+                </div>
+              </form>
+            </div>
+
+            <div id="graph-info" class="muted"></div>
+            <div id="graph-path-result" class="result-box"></div>
+            <div id="graph-result" class="result-box"></div>
+          </section>
+
+          <footer class="footer">Capstone - Struktur Data</footer>
+        </div>
       </main>
     </div>
 

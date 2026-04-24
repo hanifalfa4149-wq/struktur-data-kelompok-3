@@ -10,19 +10,21 @@ function setStackMessage(message, ok = true) {
 function renderStack(rows) {
   const result = document.getElementById("stack-result");
   if (!rows.length) {
-    result.innerHTML = '<div class="muted">Stack muatan kosong.</div>';
+    result.innerHTML = '<div class="empty-state">📭 Belum ada data</div>';
     return;
   }
 
-  const html = rows
+  const sorted = [...rows].sort(
+    (a, b) => new Date(b.loaded_at).getTime() - new Date(a.loaded_at).getTime(),
+  );
+
+  const html = sorted
     .map(
-      (row, index) =>
-        `<li>${index + 1}. ${row.barang_id} x${row.qty} <span class="muted">(${new Date(
-          row.loaded_at,
-        ).toLocaleString()})</span></li>`,
+      (row) =>
+        `<li class="stack-item"><div><span class="badge mono">${row.barang_id}</span> <span class="badge-qty">Qty ${row.qty}</span><div class="muted">${new Date(row.loaded_at).toLocaleString("id-ID")}</div></div><span class="undo-pill">Undo</span></li>`,
     )
     .join("");
-  result.innerHTML = `<ol>${html}</ol>`;
+  result.innerHTML = `<ul class="stack-list">${html}</ul>`;
 }
 
 async function refreshStackByPlate(platNomor) {

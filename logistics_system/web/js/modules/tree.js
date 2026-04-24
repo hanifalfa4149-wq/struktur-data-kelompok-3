@@ -24,10 +24,10 @@ function buildTree(rows, parentId = null, depth = 0) {
 
   return children
     .map((node) => {
-      const indent = depth * 16;
-      const label = `<div class="tree-node" style="padding-left:${indent}px">${
+      const indent = depth * 24;
+      const label = `<div class="tree-node" data-depth="${depth}" style="margin-left:${indent}px">${
         typeBadge(node.type)
-      } <strong>${node.name || node.id}</strong> <span class="muted">(${node.id})</span></div>`;
+      } <strong>${node.name || node.id}</strong> <span class="muted mono">(${node.id})</span></div>`;
       const subtree = buildTree(rows, node.id, depth + 1);
       return `${label}${subtree}`;
     })
@@ -38,7 +38,7 @@ function renderTreeResult(message, html, ok = true) {
   const info = document.getElementById("tree-info");
   const result = document.getElementById("tree-result");
   info.innerHTML = `<span class="${ok ? "text-success" : "text-error"}">${message}</span>`;
-  result.innerHTML = html || '<div class="muted">Tidak ada data.</div>';
+  result.innerHTML = html || '<div class="empty-state">📭 Belum ada data</div>';
 }
 
 function renderChildren(nodeId) {
@@ -61,7 +61,7 @@ function renderChildren(nodeId) {
       (child) =>
         `<div class="list-row">${typeBadge(child.type)} <strong>${
           child.name || child.id
-        }</strong> <span class="muted">(${child.id})</span></div>`,
+        }</strong> <span class="muted mono">(${child.id})</span></div>`,
     )
     .join("");
   renderTreeResult(`Ditemukan ${children.length} node anak.`, html, true);
@@ -76,7 +76,7 @@ async function loadAndRenderTree() {
   }
 
   treeRows = res.data;
-  const html = buildTree(treeRows);
+  const html = `<div class="tree-view">${buildTree(treeRows)}</div>`;
   renderTreeResult("Hierarki berhasil dimuat.", html, true);
 }
 

@@ -5,14 +5,19 @@ import { getQueue } from "../supabase.js";
 function renderQueue(items) {
   const result = document.getElementById("queue-result");
   if (!items.length) {
-    result.innerHTML = '<div class="muted">Antrean kosong.</div>';
+    result.innerHTML = '<div class="empty-state">🅿️ Loading dock kosong</div>';
     return;
   }
 
   const html = items
-    .map((item, index) => `<li>${index + 1}. ${item.plat_nomor}</li>`)
+    .map((item, index) => {
+      const joinedAt = item.joined_at
+        ? new Date(item.joined_at).toLocaleString("id-ID")
+        : "Waktu tidak tersedia";
+      return `<article class="queue-card"><div class="queue-plate">${item.plat_nomor}</div><div class="queue-joined">Posisi #${index + 1} • ${joinedAt}</div></article>`;
+    })
     .join("");
-  result.innerHTML = `<ol>${html}</ol>`;
+  result.innerHTML = `<div class="queue-strip">${html}</div>`;
 }
 
 function setQueueMessage(message, ok = true) {

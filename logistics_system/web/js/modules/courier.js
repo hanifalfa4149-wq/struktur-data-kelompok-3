@@ -10,18 +10,30 @@ function setCourierMessage(message, ok = true) {
 function renderCourierRows(rows) {
   const result = document.getElementById("courier-result");
   if (!rows.length) {
-    result.innerHTML = '<div class="muted">Rute kurir kosong.</div>';
+    result.innerHTML = '<div class="empty-state">📭 Belum ada data</div>';
     return;
   }
 
   const html = rows
     .map(
       (row) =>
-        `<li>#${row.urutan} <strong>${row.paket_id}</strong> - ${row.alamat} <span class="muted">(${row.penerima})</span></li>`,
+        `<li class="timeline-item"><div class="timeline-title">#${row.urutan} <span class="mono">${row.paket_id}</span></div><div class="timeline-sub">${row.alamat} • ${row.penerima}</div></li>`,
     )
     .join("");
 
-  result.innerHTML = `<ol>${html}</ol>`;
+  result.innerHTML = `<ul class="timeline-list">${html}</ul>`;
+}
+
+function animateTopDelivered() {
+  const firstItem = document.querySelector("#courier-result .timeline-item");
+  if (!firstItem) {
+    return Promise.resolve();
+  }
+
+  firstItem.classList.add("delivered-out");
+  return new Promise((resolve) => {
+    setTimeout(resolve, 220);
+  });
 }
 
 async function refreshRoute(kurirId) {
@@ -126,6 +138,7 @@ export async function initCourierModule() {
 
     setCourierMessage(res.message, true);
     showToast(res.message, "success");
+    await animateTopDelivered();
     await refreshRoute(kurirId);
   });
 }
